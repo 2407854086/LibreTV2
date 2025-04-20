@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>M3U8 Player with Input</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        /* 简单样式让页面看起来更整洁 */
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; margin-top: 50px; }
+        input[type=text] { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; }
+        button { padding: 10px 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>播放M3U8流媒体</h2>
+    <input type="text" id="m3u8Url" placeholder="请输入M3U8地址">
+    <button onclick="loadM3U8()">播放</button>
+    <video id="videoPlayer" controls style="width: 100%; height: auto; margin-top: 20px;"></video>
+</div>
+
+<script>
+    function loadM3U8() {
+        var m3u8Url = document.getElementById('m3u8Url').value;
+        var video = document.getElementById('videoPlayer');
+
+        // 清除之前的HLS实例，以防重复加载
+        if (video.hls) {
+            video.hls.destroy();
+        }
+
+        if (Hls.isSupported()) {
+            video.hls = new Hls();
+            video.hls.loadSource(m3u8Url);
+            video.hls.attachMedia(video);
+            video.hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = m3u8Url;
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
+        }
+    }
+</script>
+</body>
+</html>
