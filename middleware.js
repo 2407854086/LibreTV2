@@ -25,7 +25,7 @@ export default async function middleware(request) {
   
   // Replace the placeholder with actual environment variable
   // If PASSWORD is not set, replace with empty string
-  const password = process.env.PASSWORD || '';
+  const password = '';
   let passwordHash = '';
   if (password) {
     passwordHash = await sha256(password);
@@ -33,8 +33,8 @@ export default async function middleware(request) {
   
   // 替换密码占位符
   let modifiedHtml = originalHtml.replace(
-    'window.__ENV__.PASSWORD = "{{PASSWORD}}";',
-    `window.__ENV__.PASSWORD = "${passwordHash}"; // SHA-256 hash`
+ //   'window.__ENV__.PASSWORD = "{{PASSWORD}}";',
+//    `window.__ENV__.PASSWORD = "${passwordHash}"; // SHA-256 hash`
   );
 
   // 修复Response构造
